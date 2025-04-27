@@ -1,306 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sorting Visualizer</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #e0f7fa;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        h1 {
-            color: #00796b;
-        }
-        #arrayContainer {
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            margin-top: 20px;
-            height: 300px;
-            width: 80%;
-            border: 2px solid #00796b;
-            background-color: #ffffff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        }
-        .bar {
-            width: 20px;
-            margin: 0 2px;
-            background-color: #007bff;
-            transition: height 0.3s ease;
-        }
-        #controls {
-            margin-top: 20px;
-            text-align: center;
-        }
-        button {
-            padding: 10px 15px;
-            margin: 0 5px;
-            cursor: pointer;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        #metrics {
-            margin-top: 20px;
-            text-align: center;
-            color: #004d40;
-            font-weight: bold;
-        }
-        input[type="range"], input[type="number"] {
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fancy Sorting Visualizer</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #003366;
+    }
+    #arrayContainer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 400px;
+      margin: 30px auto;
+      background: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 90%;
+    }
+    .bar {
+      margin: 0 2px;
+      background-color: #3498db;
+      width: 20px;
+      border-radius: 5px 5px 0 0;
+      transition: all 0.3s ease;
+    }
+    #controls {
+      margin-top: 20px;
+    }
+    button {
+      background-color: #3498db;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      margin: 5px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #2c80b4;
+    }
+    input[type=range], input[type=number] {
+      margin-top: 10px;
+    }
+    #metrics {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #003366;
+    }
+  </style>
 </head>
 <body>
-    <h1>Sorting Visualizer</h1>
-    <div id="arrayContainer"></div>
-    <div id="controls">
-        <input type="number" id="arraySize" min="5" max="50" value="10">
-        <button id="generateArrayBtn">Generate New Array</button>
-        <button id="startBubbleSortBtn">Start Bubble Sort</button>
-        <button id="startSelectionSortBtn">Start Selection Sort</button>
-        <button id="startInsertionSortBtn">Start Insertion Sort</button>
-        <button id="startMergeSortBtn">Start Merge Sort</button>
-        <button id="startQuickSortBtn">Start Quick Sort</button>
-        <button id="pauseBtn">Pause</button>
-        <button id="resumeBtn">Resume</button>
-        <button id="muteBtn">Mute</button>
-        <input type="range" id="speedControl" min="1" max="1000" value="500">
-        <label for="speedControl">Speed</label>
-    </div>
-    <div id="metrics">
-        <div id="comparisons">Comparisons: 0</div>
-        <div id="swaps">Swaps: 0</div>
-        <div id="executionTime">Execution Time: 0s</div>
-    </div>
-    <audio id="sortSound" src="https://www.soundjay.com/button/sounds/button-16.mp3" loop></audio>
-    
-    <script>
-        let array = [];
-        let isPaused = false;
-        let speed = 500;
-        let comparisons = 0;
-        let swaps = 0;
-        let executionTime = 0;
 
-        const arrayContainer = document.getElementById('arrayContainer');
-        const comparisonsDisplay = document.getElementById('comparisons');
-        const swapsDisplay = document.getElementById('swaps');
-        const executionTimeDisplay = document.getElementById('executionTime');
-        const sortSound = document.getElementById('sortSound');
+  <h1>Fancy Sorting Visualizer</h1>
 
-        function generateRandomArray(size) {
-            array = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
-            renderArray();
+  <div id="arrayContainer"></div>
+
+  <div id="controls">
+    <input type="number" id="arraySize" min="5" max="50" value="20">
+    <button id="generateArrayBtn">Generate Array</button>
+    <button onclick="startSorting('bubble')">Bubble Sort</button>
+    <button onclick="startSorting('selection')">Selection Sort</button>
+    <button onclick="startSorting('insertion')">Insertion Sort</button>
+    <button onclick="startSorting('merge')">Merge Sort</button>
+    <button onclick="startSorting('quick')">Quick Sort</button><br>
+    <button id="pauseBtn">Pause</button>
+    <button id="resumeBtn">Resume</button>
+    <button id="muteBtn">Mute Sound</button><br>
+    <input type="range" id="speedControl" min="1" max="1000" value="500">
+    <label>Speed</label>
+  </div>
+
+  <div id="metrics">
+    <div id="comparisons">Comparisons: 0</div>
+    <div id="swaps">Swaps: 0</div>
+    <div id="executionTime">Execution Time: 0s</div>
+  </div>
+
+  <audio id="sortSound" src="https://www.soundjay.com/button/sounds/button-3.mp3" loop></audio>
+
+<script>
+  let array = [];
+  let isPaused = false;
+  let speed = 500;
+  let comparisons = 0;
+  let swaps = 0;
+  let executionTime = 0;
+
+  const arrayContainer = document.getElementById('arrayContainer');
+  const comparisonsDisplay = document.getElementById('comparisons');
+  const swapsDisplay = document.getElementById('swaps');
+  const executionTimeDisplay = document.getElementById('executionTime');
+  const sortSound = document.getElementById('sortSound');
+  const speedControl = document.getElementById('speedControl');
+
+  speedControl.addEventListener('input', (e) => {
+    speed = 1000 - e.target.value;
+  });
+
+  function generateRandomArray(size) {
+    array = Array.from({length: size}, () => Math.floor(Math.random() * 100) + 1);
+    renderArray();
+  }
+
+  function renderArray(activeIndices = []) {
+    arrayContainer.innerHTML = '';
+    array.forEach((value, idx) => {
+      const bar = document.createElement('div');
+      bar.className = 'bar';
+      bar.style.height = `${value * 3}px`;
+      if (activeIndices.includes(idx)) {
+        bar.style.backgroundColor = '#e74c3c'; // Highlight
+      }
+      arrayContainer.appendChild(bar);
+    });
+  }
+
+  async function wait() {
+    renderMetrics();
+    return new Promise(resolve => {
+      let interval = setInterval(() => {
+        if (!isPaused) {
+          clearInterval(interval);
+          resolve();
         }
+      }, speed);
+    });
+  }
 
-        function renderArray() {
-            arrayContainer.innerHTML = '';
-            array.forEach(value => {
-                const bar = document.createElement('div');
-                bar.className = 'bar';
-                bar.style.height = `${value * 3}px`;
-                arrayContainer.appendChild(bar);
-            });
+  async function bubbleSort() {
+    let startTime = Date.now();
+    for (let i = 0; i < array.length; i++) {
+      for (let j = 0; j < array.length - i - 1; j++) {
+        comparisons++;
+        renderArray([j, j+1]);
+        await wait();
+        if (array[j] > array[j+1]) {
+          swaps++;
+          [array[j], array[j+1]] = [array[j+1], array[j]];
+          renderArray([j, j+1]);
+          await wait();
         }
+      }
+    }
+    showExecutionTime(startTime);
+  }
 
-        async function bubbleSort() {
-            const n = array.length;
-            let startTime = Date.now();
-            for (let i = 0; i < n - 1; i++) {
-                for (let j = 0; j < n - i - 1; j++) {
-                    comparisons++;
-                    renderArray();
-                    await new Promise(resolve => setTimeout(resolve, speed));
-                    if (array[j] > array[j + 1]) {
-                        swaps++;
-                        [array[j], array[j + 1]] = [array[j + 1], array[j]];
-                    }
-                    renderArray();
-                    if (isPaused) {
-                        await pauseSorting();
-                    }
-                }
-            }
-            executionTime = (Date.now() - startTime) / 1000;
-            executionTimeDisplay.innerText = `Execution Time: ${executionTime}s`;
-            stopSound();
+  async function selectionSort() {
+    let startTime = Date.now();
+    for (let i = 0; i < array.length; i++) {
+      let minIdx = i;
+      for (let j = i+1; j < array.length; j++) {
+        comparisons++;
+        renderArray([j, minIdx]);
+        await wait();
+        if (array[j] < array[minIdx]) {
+          minIdx = j;
         }
+      }
+      if (minIdx !== i) {
+        swaps++;
+        [array[i], array[minIdx]] = [array[minIdx], array[i]];
+        renderArray([i, minIdx]);
+        await wait();
+      }
+    }
+    showExecutionTime(startTime);
+  }
 
-        async function selectionSort() {
-            const n = array.length;
-            let startTime = Date.now();
-            for (let i = 0; i < n - 1; i++) {
-                let minIndex = i;
-                for (let j = i + 1; j < n; j++) {
-                    comparisons++;
-                    renderArray();
-                    await new Promise(resolve => setTimeout(resolve, speed));
-                    if (array[j] < array[minIndex]) {
-                        minIndex = j;
-                    }
-                }
-                if (minIndex !== i) {
-                    swaps++;
-                    [array[i], array[minIndex]] = [array[minIndex], array[i]];
-                }
-                renderArray();
-                if (isPaused) {
-                    await pauseSorting();
-                }
-            }
-            executionTime = (Date.now() - startTime) / 1000;
-            executionTimeDisplay.innerText = `Execution Time: ${executionTime}s`;
-            stopSound();
-        }
+  async function insertionSort() {
+    let startTime = Date.now();
+    for (let i = 1; i < array.length; i++) {
+      let key = array[i];
+      let j = i-1;
+      while (j >= 0 && array[j] > key) {
+        comparisons++;
+        array[j+1] = array[j];
+        j--;
+        renderArray([j, j+1]);
+        await wait();
+      }
+      array[j+1] = key;
+      renderArray([j+1]);
+      swaps++;
+      await wait();
+    }
+    showExecutionTime(startTime);
+  }
 
-        async function insertionSort() {
-            const n = array.length;
-            let startTime = Date.now();
-            for (let i = 1; i < n; i++) {
-                let key = array[i];
-                let j = i - 1;
-                while (j >= 0 && array[j] > key) {
-                    comparisons++;
-                    swaps++;
-                    array[j + 1] = array[j];
-                    renderArray();
-                    await new Promise(resolve => setTimeout(resolve, speed));
-                    j--;
-                }
-                array[j + 1] = key;
-                renderArray();
-                if (isPaused) {
-                    await pauseSorting();
-                }
-            }
-            executionTime = (Date.now() - startTime) / 1000;
-            executionTimeDisplay.innerText = `Execution Time: ${executionTime}s`;
-            stopSound();
-        }
+  async function mergeSort(arr = array, l = 0, r = array.length - 1) {
+    if (l >= r) return;
+    const mid = Math.floor((l + r) / 2);
+    await mergeSort(arr, l, mid);
+    await mergeSort(arr, mid+1, r);
+    await merge(arr, l, mid, r);
+  }
 
-        async function mergeSort(arr = array) {
-            if (arr.length <= 1) return arr;
-            const mid = Math.floor(arr.length / 2);
-            const left = await mergeSort(arr.slice(0, mid));
-            const right = await mergeSort(arr.slice(mid));
-            return merge(left, right);
-        }
+  async function merge(arr, l, mid, r) {
+    let n1 = mid - l + 1;
+    let n2 = r - mid;
+    let L = [], R = [];
+    for (let i = 0; i < n1; i++) L.push(arr[l+i]);
+    for (let i = 0; i < n2; i++) R.push(arr[mid+1+i]);
+    let i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+      comparisons++;
+      if (L[i] <= R[j]) {
+        arr[k++] = L[i++];
+      } else {
+        arr[k++] = R[j++];
+      }
+      renderArray([k-1]);
+      await wait();
+    }
+    while (i < n1) {
+      arr[k++] = L[i++];
+      renderArray([k-1]);
+      await wait();
+    }
+    while (j < n2) {
+      arr[k++] = R[j++];
+      renderArray([k-1]);
+      await wait();
+    }
+  }
 
-        async function merge(left, right) {
-            let result = [], i = 0, j = 0;
-            while (i < left.length && j < right.length) {
-                comparisons++;
-                if (left[i] < right[j]) {
-                    result.push(left[i++]);
-                } else {
-                    result.push(right[j++]);
-                }
-                renderArray();
-                await new Promise(resolve => setTimeout(resolve, speed));
-                if (isPaused) {
-                    await pauseSorting();
-                }
-            }
-            return [...result, ...left.slice(i), ...right.slice(j)];
-        }
+  async function quickSort(low = 0, high = array.length-1) {
+    if (low < high) {
+      let pi = await partition(low, high);
+      await quickSort(low, pi-1);
+      await quickSort(pi+1, high);
+    }
+  }
 
-        async function quickSort(arr = array) {
-            if (arr.length <= 1) return arr;
-            const pivot = arr[arr.length - 1];
-            const left = [];
-            const right = [];
-            for (let i = 0; i < arr.length - 1; i++) {
-                comparisons++;
-                if (arr[i] < pivot) {
-                    left.push(arr[i]);
-                } else {
-                    right.push(arr[i]);
-                }
-            }
-            const sortedLeft = await quickSort(left);
-            const sortedRight = await quickSort(right);
-            return [...sortedLeft, pivot, ...sortedRight];
-        }
+  async function partition(low, high) {
+    let pivot = array[high];
+    let i = low-1;
+    for (let j = low; j < high; j++) {
+      comparisons++;
+      renderArray([j, high]);
+      await wait();
+      if (array[j] < pivot) {
+        i++;
+        swaps++;
+        [array[i], array[j]] = [array[j], array[i]];
+        renderArray([i, j]);
+        await wait();
+      }
+    }
+    swaps++;
+    [array[i+1], array[high]] = [array[high], array[i+1]];
+    renderArray([i+1, high]);
+    await wait();
+    return i+1;
+  }
 
-        async function startSorting(sortType) {
-            resetMetrics();
-            sortSound.play();
-            if (sortType === 'bubble') {
-                await bubbleSort();
-            } else if (sortType === 'selection') {
-                await selectionSort();
-            } else if (sortType === 'insertion') {
-                await insertionSort();
-            } else if (sortType === 'merge') {
-                array = await mergeSort();
-                renderArray();
-            } else if (sortType === 'quick') {
-                array = await quickSort();
-                renderArray();
-            }
-        }
+  async function startSorting(type) {
+    resetMetrics();
+    sortSound.play();
+    let startTime = Date.now();
+    if (type === 'bubble') await bubbleSort();
+    else if (type === 'selection') await selectionSort();
+    else if (type === 'insertion') await insertionSort();
+    else if (type === 'merge') await mergeSort();
+    else if (type === 'quick') await quickSort();
+    showExecutionTime(startTime);
+    stopSound();
+  }
 
-        function resetMetrics() {
-            comparisons = 0;
-            swaps = 0;
-            executionTime = 0;
-            comparisonsDisplay.innerText = 'Comparisons';
-            comparisonsDisplay.innerText = 'Comparisons: 0';
-            swapsDisplay.innerText = 'Swaps: 0';
-            executionTimeDisplay.innerText = 'Execution Time: 0s';
-        }
+  function resetMetrics() {
+    comparisons = 0;
+    swaps = 0;
+    executionTime = 0;
+    comparisonsDisplay.innerText = 'Comparisons: 0';
+    swapsDisplay.innerText = 'Swaps: 0';
+    executionTimeDisplay.innerText = 'Execution Time: 0s';
+  }
 
-        async function pauseSorting() {
-            await new Promise(resolve => {
-                const intervalId = setInterval(() => {
-                    if (!isPaused) {
-                        clearInterval(intervalId);
-                        resolve();
-                    }
-                }, 100);
-            });
-        }
+  function renderMetrics() {
+    comparisonsDisplay.innerText = `Comparisons: ${comparisons}`;
+    swapsDisplay.innerText = `Swaps: ${swaps}`;
+  }
 
-        document.getElementById('generateArrayBtn').addEventListener('click', () => {
-            const size = parseInt(document.getElementById('arraySize').value);
-            generateRandomArray(size);
-        });
+  function showExecutionTime(startTime) {
+    executionTime = (Date.now() - startTime) / 1000;
+    executionTimeDisplay.innerText = `Execution Time: ${executionTime.toFixed(2)}s`;
+  }
 
-        document.getElementById('startBubbleSortBtn').addEventListener('click', () => startSorting('bubble'));
-        document.getElementById('startSelectionSortBtn').addEventListener('click', () => startSorting('selection'));
-        document.getElementById('startInsertionSortBtn').addEventListener('click', () => startSorting('insertion'));
-        document.getElementById('startMergeSortBtn').addEventListener('click', async () => {
-            await mergeSort(array);
-            renderArray();
-        });
-        document.getElementById('startQuickSortBtn').addEventListener('click', async () => {
-            array = await quickSort(array);
-            renderArray();
-        });
+  function stopSound() {
+    sortSound.pause();
+    sortSound.currentTime = 0;
+  }
 
-        document.getElementById('pauseBtn').addEventListener('click', () => { isPaused = true; });
-        document.getElementById('resumeBtn').addEventListener('click', () => { isPaused = false; });
-        document.getElementById('muteBtn').addEventListener('click', () => { sortSound.muted = !sortSound.muted; });
-        document.getElementById('speedControl').addEventListener('input', (e) => { speed = e.target.value; });
+  document.getElementById('generateArrayBtn').addEventListener('click', () => {
+    const size = parseInt(document.getElementById('arraySize').value);
+    generateRandomArray(size);
+  });
 
-        function stopSound() {
-            sortSound.pause();
-            sortSound.currentTime = 0;
-        }
-    </script>
+  document.getElementById('pauseBtn').addEventListener('click', () => { isPaused = true; });
+  document.getElementById('resumeBtn').addEventListener('click', () => { isPaused = false; });
+  document.getElementById('muteBtn').addEventListener('click', () => { sortSound.muted = !sortSound.muted; });
+
+  window.onload = () => {
+    generateRandomArray(20);
+  };
+</script>
+
 </body>
 </html>
-
-
